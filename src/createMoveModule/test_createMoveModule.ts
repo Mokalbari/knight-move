@@ -31,10 +31,11 @@ describe("move module", () => {
 
   it("returns false when a correct move is played", () => {
     expect(moveModule.isOutOfBounds([0, 0])).toBeFalsy()
+    expect(moveModule.isOutOfBounds([7, 7])).toBeFalsy()
     expect(moveModule.isOutOfBounds([7, 0])).toBeFalsy()
     expect(moveModule.isOutOfBounds([5, 3])).toBeFalsy()
     expect(moveModule.isOutOfBounds([0, 3])).toBeFalsy()
-    expect(moveModule.isOutOfBounds([0, 7])).toBeFalsy()
+    expect(moveModule.isOutOfBounds([2, 6])).toBeFalsy()
   })
 
   it("returns the untouched square list if a value is visited", () => {
