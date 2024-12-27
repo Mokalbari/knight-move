@@ -6,7 +6,7 @@ interface MoveModule {
   processMove: (squareList: SquareList, coordinates: Coordinates) => string[]
 }
 
-export function createMoveModule(): MoveModule {
+export function useMoveModule(): MoveModule {
   const MIN_BOUND = 0
   const MAX_BOUND = 7
 

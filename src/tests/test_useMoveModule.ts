@@ -1,10 +1,10 @@
 import { expect } from "jsr:@std/expect"
 import { describe, it } from "jsr:@std/testing/bdd"
+import { useMoveModule } from "../modules/useMoveModule.ts"
 import type { SquareList } from "../types/definitions.ts"
-import { createMoveModule } from "./createMoveModule.ts"
 
 describe("move module", () => {
-  const moveModule = createMoveModule()
+  const moveModule = useMoveModule()
   const visited: SquareList = ["00", "02", "40", "57", "14"]
 
   it("returns true if a value is already visited", () => {
