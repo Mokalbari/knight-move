@@ -2,7 +2,8 @@
   "tasks": {
     "dev": "deno run --watch main.ts",
     "test_move": "deno test --watch ./src/tests/test_useMoveModule.ts",
-    "test_state": "deno test --watch ./src/tests/test_useStateModule.ts"
+    "test_state": "deno test --watch ./src/tests/test_useStateModule.ts",
+    "test_knight": "deno test --watch ./src/tests/test_useKnightMove.ts"
   },
   "imports": {
     "@std/assert": "jsr:@std/assert@1"
