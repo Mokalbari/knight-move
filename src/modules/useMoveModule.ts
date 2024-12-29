@@ -1,5 +1,12 @@
 import type { Coordinates } from "../types/definitions.ts"
 
+/*
+  Move module is here to define the boundaries of the chess boards and the knight moves.
+  It provides a util function to check if a move is playable (eg inside the chess board)
+  and a util to generate all possible moves from a position (even if that move is not playable.)
+  (not playable moves will be discarded in the search engine)
+*/
+
 interface MoveModule {
   isOutOfBounds: (coordinates: Coordinates) => boolean
   generateMoves: (coordinates: Coordinates) => Coordinates[]
@@ -25,12 +32,7 @@ export function useMoveModule(): MoveModule {
   }
 
   function generateMoves([x, y]: Coordinates): Coordinates[] {
-    const output = []
-
-    for (const [tx, ty] of OFFSETS) {
-      output.push([x + tx, y + ty])
-    }
-    return output
+    return OFFSETS.map(([tx, ty]) => [tx + x, ty + y])
   }
 
   return { isOutOfBounds, generateMoves }

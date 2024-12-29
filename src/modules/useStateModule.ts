@@ -1,3 +1,11 @@
+/*
+  the state module provides a readonly generic array.
+  It also provides a function to read the array (get) reset the array with a new value (set)
+  Or to update the current array with a value and old values (update)
+  The state is immutable. This means that a state is not really updated, but we create a new one based on the previous one.
+  The garbage collector will take care of memory usage
+*/
+
 interface StateModule<T> {
   get: () => ReadonlyArray<T>
   set: (newState: ReadonlyArray<T>) => StateModule<T>

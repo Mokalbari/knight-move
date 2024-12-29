@@ -1,6 +1,7 @@
+import { useSearchEngine } from "../modules/useSearchEngine.ts"
 import type { Coordinates } from "../types/definitions.ts"
-import { useSearchEngine } from "./useSearchEngine.ts"
 
+// Simple wizard to wrap everything together and outputs nice log message to the console.
 export function knightMoveWizard(start: Coordinates, end: Coordinates): void {
   const userInput = useSearchEngine(start, end)
   const { path, moves } = userInput.findPath()
