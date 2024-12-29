@@ -1,28 +1,37 @@
 import type { Coordinates } from "../types/definitions.ts"
 
 interface MoveModule {
-  hash: (coordinates: Coordinates) => string
   isOutOfBounds: (coordinates: Coordinates) => boolean
+  generateMoves: (coordinates: Coordinates) => Coordinates[]
 }
 
 export function useMoveModule(): MoveModule {
   const MIN_BOUND = 0
   const MAX_BOUND = 7
 
-  function _isValidEntry([x, y]: Coordinates) {
-    return Number.isInteger(x) && Number.isInteger(y)
-  }
-
-  function hash([x, y]: Coordinates): string {
-    if (!_isValidEntry([x, y])) {
-      throw new Error("The provided coordinates are not of type Integer.")
-    }
-    return `${x}${y}`
-  }
+  const OFFSETS: Coordinates[] = [
+    [2, 1],
+    [2, -1],
+    [-2, 1],
+    [-2, -1],
+    [1, 2],
+    [-1, 2],
+    [1, -2],
+    [-1, -2],
+  ] as const
 
   function isOutOfBounds([x, y]: Coordinates): boolean {
     return x < MIN_BOUND || x > MAX_BOUND || y < MIN_BOUND || y > MAX_BOUND
   }
 
-  return { hash, isOutOfBounds }
+  function generateMoves([x, y]: Coordinates): Coordinates[] {
+    const output = []
+
+    for (const [tx, ty] of OFFSETS) {
+      output.push([x + tx, y + ty])
+    }
+    return output
+  }
+
+  return { isOutOfBounds, generateMoves }
 }

@@ -3,7 +3,7 @@ import type {
   EngineResult,
   QueueItem,
 } from "../types/definitions.ts"
-import { useKnightMove } from "./useKnightMove.ts"
+import { useEntry } from "./useEntry.ts"
 import { useMoveModule } from "./useMoveModule.ts"
 import { useStateModule } from "./useStateModule.ts"
 
@@ -22,27 +22,31 @@ export function useSearchEngine(
 
   const state = useStateModule<QueueItem>([startingNode])
   const visitedSquares = new Set<string>()
+  /* We use a mutable Set for tracking visited squares as a performance optimization.
+   While this deviates from pure functional principles, the tradeoff is justified because:
+   1. The Set is scoped only to this search operation
+   2. The mutability is encapsulated within the search engine
+   3. Creating new Sets for each visited square would significantly impact performance */
 
-  const { hash, isOutOfBounds } = useMoveModule()
-  const { generateMoves } = useKnightMove()
+  const { hash } = useEntry()
+  const { generateMoves, isOutOfBounds } = useMoveModule()
 
-  function _isTarget(currentPosition: Coordinates): boolean {
+  function isTarget(currentPosition: Coordinates): boolean {
     return end.every((value, index) => value === currentPosition[index])
   }
 
-  function _traverseLevel(queue: QueueItem[]): QueueItem | undefined {
+  function traverseLevel(queue: QueueItem[]): QueueItem | undefined {
     if (queue.length === 0) return undefined
 
     const currentNode = queue[0]
 
-    if (_isTarget(currentNode.position)) {
+    if (isTarget(currentNode.position)) {
       return currentNode
     }
 
     visitedSquares.add(hash(currentNode.position))
 
     const moves = generateMoves(currentNode.position)
-    const validMovesAsNode = moves
       .filter((move) => !isOutOfBounds(move) && !visitedSquares.has(hash(move)))
       .map(
         (move) =>
@@ -52,20 +56,22 @@ export function useSearchEngine(
           } as QueueItem)
       )
 
-    const newQueue = [...queue.slice(1), ...validMovesAsNode]
-    return _traverseLevel(newQueue)
+    const newQueue = [...queue.slice(1), ...moves]
+    return traverseLevel(newQueue)
   }
 
   function findPath(): EngineResult {
     if (isOutOfBounds(start) || isOutOfBounds(end))
-      return { path: undefined, moves: 0 }
+      return { path: null, moves: null }
 
-    if (_isTarget(start)) return { path: [start], moves: 0 }
+    // early return to preserve some time and memory usage.
+    if (isTarget(start)) return { path: [start], moves: 0 }
 
-    const queueCopy = [...state.get()]
-    const result = _traverseLevel(queueCopy)
+    // The state is a readonly array,
+    // it needs to be copied inside another array to be used inside traverseLevel
+    const result = traverseLevel([...state.get()])
     return {
-      path: result ? result.path : undefined,
+      path: result?.path ?? null,
       moves: result ? result.path.length - 1 : 0,
     }
   }

@@ -5,6 +5,6 @@ export type QueueItem = {
   path: Coordinates[]
 }
 export type EngineResult = {
-  path: Coordinates[] | undefined
-  moves: number | undefined
+  path: Coordinates[] | null
+  moves: number | null
 }

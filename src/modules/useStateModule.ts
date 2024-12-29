@@ -9,10 +9,10 @@ interface StateModule<T> {
 export function useStateModule<T>(
   initialState: ReadonlyArray<T> = []
 ): StateModule<T> {
-  const _state = Object.freeze([...initialState]) as ReadonlyArray<T>
+  const state = Object.freeze([...initialState]) as ReadonlyArray<T>
 
   function get(): ReadonlyArray<T> {
-    return _state
+    return state
   }
 
   function set(newState: ReadonlyArray<T>): StateModule<T> {
@@ -22,7 +22,7 @@ export function useStateModule<T>(
   function update(
     fn: (current: ReadonlyArray<T>) => ReadonlyArray<T>
   ): StateModule<T> {
-    const newState = fn([..._state])
+    const newState = fn([...state])
     return useStateModule(newState)
   }
 

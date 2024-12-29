@@ -2,16 +2,16 @@ import type { Coordinates } from "../types/definitions.ts"
 import { useSearchEngine } from "./useSearchEngine.ts"
 
 export function knightMoveWizard(start: Coordinates, end: Coordinates): void {
-  const _userInput = useSearchEngine(start, end)
-  const { path, moves } = _userInput.findPath()
+  const userInput = useSearchEngine(start, end)
+  const { path, moves } = userInput.findPath()
 
-  function _beautifyPath(arr: Coordinates[]) {
+  function beautifyPath(arr: Coordinates[]) {
     return arr.map((innerArr) => `[${innerArr.join(",")}]`).join(" -> ")
   }
 
   if (path) {
     console.log(
-      `The shortest path to get to [${end}] is: ${_beautifyPath(
+      `The shortest path to get to [${end}] is: ${beautifyPath(
         path
       )}. You make it in ${moves} moves`
     )
