@@ -1,3 +1,3 @@
-import { useSearchEngine } from "./src/modules/useSearchEngine.ts"
+import { knightMoveWizard } from "./src/modules/knightMoveWizard.ts"
 
-const knightMove = useSearchEngine([4, 5], [2, 1])
+knightMoveWizard([0, 8], [6, 7])

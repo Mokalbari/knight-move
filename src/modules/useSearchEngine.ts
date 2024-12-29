@@ -7,7 +7,14 @@ import { useKnightMove } from "./useKnightMove.ts"
 import { useMoveModule } from "./useMoveModule.ts"
 import { useStateModule } from "./useStateModule.ts"
 
-export function useSearchEngine(start: Coordinates, end: Coordinates) {
+interface SearchEngine {
+  findPath: () => EngineResult
+}
+
+export function useSearchEngine(
+  start: Coordinates,
+  end: Coordinates
+): SearchEngine {
   const startingNode: QueueItem = {
     position: start,
     path: [start],
@@ -19,16 +26,16 @@ export function useSearchEngine(start: Coordinates, end: Coordinates) {
   const { hash, isOutOfBounds } = useMoveModule()
   const { generateMoves } = useKnightMove()
 
-  function isTarget(currentPosition: Coordinates): boolean {
+  function _isTarget(currentPosition: Coordinates): boolean {
     return end.every((value, index) => value === currentPosition[index])
   }
 
-  function traverseLevel(queue: QueueItem[]): QueueItem | undefined {
+  function _traverseLevel(queue: QueueItem[]): QueueItem | undefined {
     if (queue.length === 0) return undefined
 
     const currentNode = queue[0]
 
-    if (isTarget(currentNode.position)) {
+    if (_isTarget(currentNode.position)) {
       return currentNode
     }
 
@@ -46,15 +53,19 @@ export function useSearchEngine(start: Coordinates, end: Coordinates) {
       )
 
     const newQueue = [...queue.slice(1), ...validMovesAsNode]
-    return traverseLevel(newQueue)
+    return _traverseLevel(newQueue)
   }
 
   function findPath(): EngineResult {
-    if (isTarget(start)) return { path: [start], moves: 0 }
+    if (isOutOfBounds(start) || isOutOfBounds(end))
+      return { path: undefined, moves: 0 }
+
+    if (_isTarget(start)) return { path: [start], moves: 0 }
+
     const queueCopy = [...state.get()]
-    const result = traverseLevel(queueCopy)
+    const result = _traverseLevel(queueCopy)
     return {
-      path: result?.path,
+      path: result ? result.path : undefined,
       moves: result ? result.path.length - 1 : 0,
     }
   }
