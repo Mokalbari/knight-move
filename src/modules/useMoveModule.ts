@@ -1,9 +1,10 @@
-import type { Coordinates, SquareList } from "../types/definitions.ts"
+import type { Coordinates } from "../types/definitions.ts"
 
 interface MoveModule {
-  isVisited: (squareList: SquareList, coordinates: Coordinates) => boolean
+  hash: (coordinates: Coordinates) => string
   isOutOfBounds: (coordinates: Coordinates) => boolean
-  processMove: (squareList: SquareList, coordinates: Coordinates) => string[]
+  // isVisited: (squareList: SquareList, coordinates: Coordinates) => boolean
+  // processMove: (squareList: SquareList, coordinates: Coordinates) => string[]
 }
 
 export function useMoveModule(): MoveModule {
@@ -14,34 +15,34 @@ export function useMoveModule(): MoveModule {
     return Number.isInteger(x) && Number.isInteger(y)
   }
 
-  function _hash([x, y]: Coordinates): string {
+  function hash([x, y]: Coordinates): string {
     if (!_isValidEntry([x, y])) {
       throw new Error("The provided coordinates are not of type Integer.")
     }
     return `${x}${y}`
   }
 
-  function isVisited(
-    squareList: SquareList,
-    coordinates: Coordinates
-  ): boolean {
-    return squareList.includes(_hash(coordinates))
-  }
-
   function isOutOfBounds([x, y]: Coordinates): boolean {
     return x < MIN_BOUND || x > MAX_BOUND || y < MIN_BOUND || y > MAX_BOUND
   }
 
-  function processMove(
-    squareList: SquareList,
-    coordinates: Coordinates
-  ): string[] {
-    if (isVisited(squareList, coordinates) || isOutOfBounds(coordinates)) {
-      return squareList
-    }
+  // function isVisited(
+  //   squareList: SquareList,
+  //   coordinates: Coordinates
+  // ): boolean {
+  //   return squareList.includes(hash(coordinates))
+  // }
 
-    return [...squareList, _hash(coordinates)]
-  }
+  // function processMove(
+  //   squareList: SquareList,
+  //   coordinates: Coordinates
+  // ): string[] {
+  //   if (isVisited(squareList, coordinates) || isOutOfBounds(coordinates)) {
+  //     return squareList
+  //   }
 
-  return { isVisited, isOutOfBounds, processMove }
+  //   return [...squareList, hash(coordinates)]
+  // }
+
+  return { hash, isOutOfBounds }
 }
