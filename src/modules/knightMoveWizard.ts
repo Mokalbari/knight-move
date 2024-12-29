@@ -5,13 +5,13 @@ export function knightMoveWizard(start: Coordinates, end: Coordinates): void {
   const _userInput = useSearchEngine(start, end)
   const { path, moves } = _userInput.findPath()
 
-  function beautifyPath(arr: Coordinates[]) {
+  function _beautifyPath(arr: Coordinates[]) {
     return arr.map((innerArr) => `[${innerArr.join(",")}]`).join(" -> ")
   }
 
   if (path) {
     console.log(
-      `The shortest path to get to ${end} is: ${beautifyPath(
+      `The shortest path to get to [${end}] is: ${_beautifyPath(
         path
       )}. You make it in ${moves} moves`
     )

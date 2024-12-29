@@ -3,8 +3,6 @@ import type { Coordinates } from "../types/definitions.ts"
 interface MoveModule {
   hash: (coordinates: Coordinates) => string
   isOutOfBounds: (coordinates: Coordinates) => boolean
-  // isVisited: (squareList: SquareList, coordinates: Coordinates) => boolean
-  // processMove: (squareList: SquareList, coordinates: Coordinates) => string[]
 }
 
 export function useMoveModule(): MoveModule {
@@ -25,24 +23,6 @@ export function useMoveModule(): MoveModule {
   function isOutOfBounds([x, y]: Coordinates): boolean {
     return x < MIN_BOUND || x > MAX_BOUND || y < MIN_BOUND || y > MAX_BOUND
   }
-
-  // function isVisited(
-  //   squareList: SquareList,
-  //   coordinates: Coordinates
-  // ): boolean {
-  //   return squareList.includes(hash(coordinates))
-  // }
-
-  // function processMove(
-  //   squareList: SquareList,
-  //   coordinates: Coordinates
-  // ): string[] {
-  //   if (isVisited(squareList, coordinates) || isOutOfBounds(coordinates)) {
-  //     return squareList
-  //   }
-
-  //   return [...squareList, hash(coordinates)]
-  // }
 
   return { hash, isOutOfBounds }
 }
